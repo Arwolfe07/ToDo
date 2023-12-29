@@ -5,6 +5,7 @@ import RootLayout from "./components/RootLayout";
 import Home from "./pages/Home";
 
 import "./App.css";
+import Auth from "./pages/Auth";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      {
+        path: '/auth',
+        element: <Auth/>
+      }
     ],
   },
 ]);
