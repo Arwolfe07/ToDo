@@ -1,9 +1,21 @@
-import React from 'react'
-import { Gi3DGlasses } from 'react-icons/gi';
+import React from "react";
+import { Gi3DGlasses } from "react-icons/gi";
+import { FaLocationCrosshairs } from "react-icons/fa6";
+import { getWeatherData } from "../../apis/openweather";
 
-const Signup = ({onChangeLogin}) => {
+const Signup = ({ onChangeLogin }) => {
+  const getLocationHandler = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const { data } = getWeatherData({
+        lat: pos.coords.latitude,
+        long: pos.coords.longitude,
+      });
+      console.log(data)
+    });
+  };
+
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-24 lg:px-8 ">
+    <div className="flex min-h-full flex-col justify-center px-6 pt-24 lg:px-8 ">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <Gi3DGlasses className="text-4xl mx-auto" />
         <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -13,9 +25,9 @@ const Signup = ({onChangeLogin}) => {
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-2" action="#" method="POST">
-        <div>
+          <div>
             <label
-              for="usernam"
+              htmlFor="usernam"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Username
@@ -25,14 +37,14 @@ const Signup = ({onChangeLogin}) => {
                 id="usernam"
                 name="username"
                 type="text"
-                autocomplete="text"
+                autoComplete="text"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
           <div>
             <label
-              for="email"
+              htmlFor="email"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Email address
@@ -42,7 +54,7 @@ const Signup = ({onChangeLogin}) => {
                 id="email"
                 name="email"
                 type="email"
-                autocomplete="email"
+                autoComplete="email"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -51,7 +63,7 @@ const Signup = ({onChangeLogin}) => {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Password
@@ -62,7 +74,7 @@ const Signup = ({onChangeLogin}) => {
                 id="password"
                 name="password"
                 type="password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -70,7 +82,7 @@ const Signup = ({onChangeLogin}) => {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="conf-password"
+                htmlFor="conf-password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Confirm Password
@@ -81,11 +93,36 @@ const Signup = ({onChangeLogin}) => {
                 id="conf-password"
                 name="password"
                 type="password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-            
+          </div>
+          <div>
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Location (Optional)
+            </label>
+            <div className="mt-2 flex items-center">
+              <input
+                id="location"
+                name="location"
+                type="text"
+                autoComplete="text"
+                className="cursor-no-drop block w-full rounded-l-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                disabled
+              />
+              <button
+                type="button"
+                className="flex py-2.5 w-1/2 items-center justify-center rounded-r-md bg-primary px-3 sm:py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-other focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                onClick={getLocationHandler}
+              >
+                <FaLocationCrosshairs className="mr-2" />
+                <span className="hidden sm:block">Get Location</span>
+              </button>
+            </div>
           </div>
           <div>
             <button
@@ -108,7 +145,7 @@ const Signup = ({onChangeLogin}) => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Signup;
