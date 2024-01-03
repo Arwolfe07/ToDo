@@ -1,17 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Gi3DGlasses } from "react-icons/gi";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { getWeatherData } from "../../apis/openweather";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signup } from "../../actions/auth";
 
 const Signup = ({ onChangeLogin }) => {
-  const getLocationHandler = () => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { data } = getWeatherData({
-        lat: pos.coords.latitude,
-        long: pos.coords.longitude,
-      });
-      console.log(data)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [location, setLocation] = useState("");
+  const [coordinates, setCoordinates] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getLocationHandler = async () => {
+    // small api to get location i.e. coordinates and place (might give false results on non-gps devices)
+    const { data } = await axios.get("https://ipapi.co/json");
+    setLocation(`${data.city}, ${data.region}`);
+    setCoordinates({
+      latitude: data.latitude,
+      longitude: data.longitude,
+      area: `${data.city}, ${data.region}`,
     });
+    dispatch({type: 'SET_MESSAGE', payload: 'If you see wrong location please turn on GPS'})
+  };
+
+  const signupSubmitHandler = (e) => {
+    e.preventDefault();
+    if (!name || !email || !password || !confirmPassword) {
+      return dispatch({
+        type: "SET_MESSAGE",
+        payload: "One or more fields are empty",
+      });
+    }
+    var validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (!email.match(validRegex)) {
+      dispatch({ type: "SET_MESSAGE", payload: "Invalid email" });
+      return;
+    }
+
+    if (password.length < 8) {
+      return dispatch({
+        type: "SET_MESSAGE",
+        payload: "Password should be atleast 8 characters long",
+      });
+    }
+    if (password !== confirmPassword) {
+      return dispatch({
+        type: "SET_MESSAGE",
+        payload: "Passwords do not match",
+      });
+    }
+    
+    dispatch(signup({name,email,password,location: coordinates},navigate))
   };
 
   return (
@@ -24,7 +70,7 @@ const Signup = ({ onChangeLogin }) => {
       </div>
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-2" action="#" method="POST">
+        <form className="space-y-2" onSubmit={signupSubmitHandler}>
           <div>
             <label
               htmlFor="usernam"
@@ -38,6 +84,7 @@ const Signup = ({ onChangeLogin }) => {
                 name="username"
                 type="text"
                 autoComplete="text"
+                onChange={(e) => setName(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -53,8 +100,9 @@ const Signup = ({ onChangeLogin }) => {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -75,6 +123,7 @@ const Signup = ({ onChangeLogin }) => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -94,6 +143,7 @@ const Signup = ({ onChangeLogin }) => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -111,6 +161,7 @@ const Signup = ({ onChangeLogin }) => {
                 name="location"
                 type="text"
                 autoComplete="text"
+                value={location}
                 className="cursor-no-drop block w-full rounded-l-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 disabled
               />

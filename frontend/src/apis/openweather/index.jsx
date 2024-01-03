@@ -7,4 +7,4 @@ const API = axios.create({
 const API_KEY = "47f6bb6bf148fa283d607fcd1ab6790d";
 
 export const getWeatherData = (data) =>
-  API.get(`/onecall?lat=${data.lat}&long=${data.long}&appid=${API_KEY}`);
+  API.get(`/weather?lat=${data.lat}&lon=${data.long}&exclude=hourly,daily&appid=${API_KEY}&units=metric`);

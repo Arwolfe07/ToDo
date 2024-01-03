@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Gi3DGlasses } from "react-icons/gi";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../actions/auth";
 
 const Login = ({ onChangeLogin }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const loginSubmitHandler = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      return dispatch({
+        type: "SET_MESSAGE",
+        payload: "One or more fields are empty",
+      });
+    }
+
+    var validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (!email.match(validRegex)) {
+      dispatch({ type: "SET_MESSAGE", payload: "Invalid email" });
+      return;
+    }
+
+    if (password.length < 8) {
+      return dispatch({
+        type: "SET_MESSAGE",
+        payload: "Password should be atleast 8 characters long",
+      });
+    }
+
+    dispatch(login({ email, password }, navigate));
+  };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-32 lg:px-8 ">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -12,7 +44,7 @@ const Login = ({ onChangeLogin }) => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form className="space-y-6" onSubmit={loginSubmitHandler}>
           <div>
             <label
               htmlFor="email"
@@ -24,9 +56,9 @@ const Login = ({ onChangeLogin }) => {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 autoComplete="email"
-                required
+                onChange={(e) => setEmail(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -55,7 +87,7 @@ const Login = ({ onChangeLogin }) => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                required
+                onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

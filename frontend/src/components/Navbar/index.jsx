@@ -1,18 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import { Gi3DGlasses } from "react-icons/gi";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.currentUserReducer);
+  const loginPageHandler = () => {
+    navigate("/auth");
+  };
 
-  const loginPageHandler =()=>{
-    navigate('/auth')
-  }
+  const logoutHandler = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/", { replace: true });
+    dispatch({
+      type: "SET_CURRENT_USER",
+      payload: null,
+    });
+  };
+
+  useEffect(() => {
+    const token = user?.token;
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        logoutHandler();
+      }
+    }
+    dispatch({
+      type: "SET_CURRENT_USER",
+      payload: JSON.parse(localStorage.getItem("Profile")),
+    });
+  }, [dispatch]);
 
   return (
     <nav className="bg-white bg-opacity-50 fixed w-full z-20 top-0 start-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link href="https://flowbite.com/" className="flex items-center space-x-3">
+        <Link
+          href="https://flowbite.com/"
+          className="flex items-center space-x-3"
+        >
           <Gi3DGlasses className="text-4xl" />
           <span className="self-center text-2xl font-extrabold whitespace-nowrap">
             <span className="text-primary">Chad</span>
@@ -20,13 +49,24 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0">
-          <button
-            type="button"
-            className="text-white bg-primary hover:bg-other focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
-            onClick={loginPageHandler}
-          >
-            Login
-          </button>
+          {user === null && (
+            <button
+              type="button"
+              className="text-white bg-primary hover:bg-other focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+              onClick={loginPageHandler}
+            >
+              Login
+            </button>
+          )}
+          {user !== null && (
+            <button
+              type="button"
+              className="text-white bg-primary hover:bg-other focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+              onClick={logoutHandler}
+            >
+              Logout
+            </button>
+          )}
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -84,10 +124,10 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                href="#"
+                to="/todo"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
               >
-                Contact
+                Tasks
               </Link>
             </li>
           </ul>

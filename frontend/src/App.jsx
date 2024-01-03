@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 
 import "./App.css";
 import Auth from "./pages/Auth";
+import Main from "./pages/Main";
+import Notification from "./components/Notification";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,11 @@ const router = createBrowserRouter([
       {
         path: '/auth',
         element: <Auth/>
+      },
+      {
+        path: '/todo',
+        element: <Main/>
+
       }
     ],
   },
@@ -32,6 +39,8 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <Notification/>
+      
     </>
   );
 }
