@@ -12,6 +12,11 @@ export default {
       'other': '#f87d61'
     }
   },
+  variants: {
+    extend: {
+      visibility: ["group-hover"],
+    }
+  },
   plugins: [require('flowbite/plugin'),],
 }
 

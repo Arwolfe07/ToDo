@@ -13,3 +13,4 @@ API.interceptors.request.use((req)=>{
 
 export const signup = (authData) => API.post('/user/signup',authData);
 export const login = (authData) => API.post('/user/login',authData);
+export const updateLocation=(locationData) =>API.patch('user/location',locationData)

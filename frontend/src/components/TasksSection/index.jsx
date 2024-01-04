@@ -2,7 +2,9 @@ import React from 'react'
 
 const TasksSection = () => {
   return (
-    <div>TasksSection</div>
+    <div className='w-2/3'>
+      
+    </div>
   )
 }
 

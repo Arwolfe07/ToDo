@@ -33,9 +33,20 @@ module.exports.login = async (req, res) => {
         }
 
         const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "6h" });
-        res.status(200).json({ result:  { name: existingUser.name, location: existingUser.location }, token });
+        res.status(200).json({ result: { name: existingUser.name, location: existingUser.location }, token });
 
     } catch (error) {
         res.status(500).json("Something went wrong...");
     }
 };
+
+module.exports.updateLocation = asyncHandler(async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { location } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(_id, { location: location }, { new: true });
+        res.status(200).json({ name: updatedUser.name, location: updatedUser.location });
+    } catch (error) {
+        res.status(500).json("Something went wrong...");
+    }
+})

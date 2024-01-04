@@ -4,7 +4,7 @@ import TasksSection from "../../components/TasksSection";
 
 const Main = () => {
   return (
-    <div>
+    <div className="py-20 h-screen border-2 flex">
       <WeatherInfoSection />
       <TasksSection />
     </div>
