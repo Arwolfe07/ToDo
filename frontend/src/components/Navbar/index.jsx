@@ -21,19 +21,19 @@ const Navbar = () => {
     });
   };
 
-  useEffect(() => {
-    const token = user?.token;
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) {
-        logoutHandler();
-      }
-    }
-    dispatch({
-      type: "SET_CURRENT_USER",
-      payload: JSON.parse(localStorage.getItem("Profile")),
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const token = user?.token;
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     if (decodedToken.exp * 1000 < new Date().getTime()) {
+  //       logoutHandler();
+  //     }
+  //   }
+  //   dispatch({
+  //     type: "SET_CURRENT_USER",
+  //     payload: JSON.parse(localStorage.getItem("Profile")),
+  //   });
+  // }, [dispatch]);
 
   return (
     <nav className="bg-white bg-opacity-50 fixed w-full z-20 top-0 start-0 border-b border-gray-200">

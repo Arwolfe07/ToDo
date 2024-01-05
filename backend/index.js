@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
 const app = express();
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
     res.send('TODO BACKEND WORKING...');
 });
 app.use('/user', authRoutes);
+app.use('/tasks',taskRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
