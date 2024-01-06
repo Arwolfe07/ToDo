@@ -27,7 +27,7 @@ const TaskContainer = () => {
         pending tasks, <span className="font-bold">{completedTask.length}</span>{" "}
         completed
       </p>
-      <table className="table w-3/4 mx-auto">
+      <table className="table lg:w-3/4 mx-auto mb-12 w-full">
         <thead>
           <tr>
             <th className="text-center px-1 py-2 bg-primary text-orange-100 rounded-tl-xl">

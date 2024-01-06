@@ -22,10 +22,11 @@ const TasksSection = () => {
       return dispatch({type: "SET_MESSAGE", payload: "10 tasks already noted"});
     }
     dispatch(addNewTask({title: task, date: moment().format("DD/MM/YYYY")}))
+    setTask("");
   }
 
   return (
-    <div className="w-2/3 px-4">
+    <div className="md:w-2/3 w-full px-4">
       <header className="tracking-tight text-center">
         <h1 className="text-2xl font-bold">
           Welcome <span className="text-primary">{user?.result?.name}</span>
@@ -40,9 +41,9 @@ const TasksSection = () => {
       </header>
       <div className="flex items-center justify-center my-2">
         <label htmlFor="task-add" className="sr-only">
-          Search
+          Add
         </label>
-        <div className="relative w-1/2">
+        <div className="relative sm:w-1/2 w-2/3">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <MdFormatListBulletedAdd className="text-xl font-bold" />
           </div>
@@ -52,6 +53,7 @@ const TasksSection = () => {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Add upto 10 most important tasks..."
             onChange={(e)=>setTask(e.target.value)}
+            value={task}
           />
         </div>
         <button

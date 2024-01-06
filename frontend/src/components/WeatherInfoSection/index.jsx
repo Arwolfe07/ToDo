@@ -39,7 +39,7 @@ const WeatherInfoSection = () => {
     });
   };
   return (
-    <div className="md:w-1/2 w-full lg:w-1/3 flex items-center flex-col">
+    <div className="md:w-1/2 sm:w-1/2 lg:w-1/3 w-2/3 flex items-center flex-col mx-auto">
       {user!==null && Object.keys(user?.result?.location).length === 0 && (
         <div className="mx-2 w-full lg:p-6 p-1 bg-white bg-opacity-50 h-fit hover:cursor-pointer rounded-lg hover:translate-x-1 hover:translate-y-1 duration-150 hover:border-2 h-1/2 flex justify-center items-center flex-col">
           <p className="my-4 font-bold tracking-tight text-lg">

@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Gi3DGlasses } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
+import { FaLocationCrosshairs } from "react-icons/fa6";
+import { updateLocation } from "../../actions/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const user = useSelector((state) => state.currentUserReducer);
   const loginPageHandler = () => {
     navigate("/auth");
@@ -19,6 +23,19 @@ const Navbar = () => {
       type: "SET_CURRENT_USER",
       payload: null,
     });
+  };
+  const getLocationHandler = async () => {
+    // small api to get location i.e. coordinates and place (might give false results on non-gps devices)
+    const { data } = await axios.get("https://ipapi.co/json");
+    dispatch(
+      updateLocation({
+        location: {
+          latitude: data.latitude,
+          longitude: data.longitude,
+          area: `${data.city}, ${data.region}`,
+        },
+      })
+    );
   };
 
   // useEffect(() => {
@@ -48,7 +65,18 @@ const Navbar = () => {
             Monkey
           </span>
         </Link>
-        <div className="flex md:order-2 space-x-3 md:space-x-0">
+        <div className="flex md:order-2   space-x-1 md:space-x-3">
+          {user !== null &&
+           (
+              <button
+                type="button"
+                className="flex py-2.5 w-1/2 items-center justify-center rounded-md bg-primary px-3 sm:py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-other focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                onClick={getLocationHandler}
+              >
+                <FaLocationCrosshairs />
+                
+              </button>
+            )}
           {user === null && (
             <button
               type="button"
@@ -99,8 +127,8 @@ const Navbar = () => {
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-white md:bg-opacity-0">
             <li>
               <Link
-                href="#"
-                className="block py-2 px-3 text-white bg-primary rounded md:bg-transparent md:text-primary md:p-0"
+                href="/"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
                 aria-current="page"
               >
                 Home
@@ -108,20 +136,30 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (location.pathname === "/") {
+                    window.scrollTo({
+                      top: document.querySelector("#about").offsetTop,
+                      behavior: "smooth",
+                    });
+                  } else {
+                    navigate("/");
+                  }
+                }}
               >
                 About
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
               >
                 Services
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 to="/todo"

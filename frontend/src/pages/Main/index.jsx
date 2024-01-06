@@ -35,7 +35,7 @@ const Main = () => {
   }, [dispatch]);
 
   return (
-    <div className="py-20 h-screen border-2 flex">
+    <div className="py-20 h-screen border-2 flex flex-col md:flex-row">
       <WeatherInfoSection />
       <TasksSection />
     </div>
