@@ -9,10 +9,13 @@ import ShimmerUI from "../ShimmerUI";
 const WeatherInfoSection = () => {
   const user = useSelector((state) => state.currentUserReducer);
   const weatherInfo = useSelector((state) => state.weatherInfoReducer);
+  const load = useSelector((state) => state.loadingReducer);
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (user !== null && Object.keys(user?.result?.location).length !== 0) {
+      // Get the location data of the logged in user and store it to redux
+      dispatch({type: 'START_LOAD'})
       dispatch(
         getWeatherData({
           lat: user?.result.location?.latitude,
@@ -61,7 +64,7 @@ const WeatherInfoSection = () => {
               </div>
             )}
           {user !== null &&
-            Object.keys(user?.result?.location).length !== 0 && weatherInfo ? (
+            Object.keys(user?.result?.location).length !== 0 && load ? (
               <div className="mx-2 w-full lg:p-6 p-1 bg-white bg-opacity-50 h-fit hover:cursor-pointer rounded-lg hover:translate-x-1 hover:translate-y-1 duration-150 hover:border-2 ">
                 <div className="flex justify-between items-center ">
                   <div>
