@@ -76,8 +76,8 @@ const WeatherInfoSection = () => {
                     </p>
                   </div>
                   <img
-                    src={`./src/assets/icons/${weatherInfo?.weather[0]?.icon}.png`}
-                    alt="./src/assets/icons/10d.png"
+                    src={`./src/assets/icons/${weatherInfo?.weather[0]?.icon}.png` || './src/assets/icons/10d.png'}
+                    alt="weather-icon"
                   />
                 </div>
                 <div className="flex justify-between items-center ">
