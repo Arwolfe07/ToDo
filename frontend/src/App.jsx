@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import { RouterProvider, createBrowserRouter,Navigate } from "react-router-dom";
+import { RouterProvider, createHashRouter,Navigate } from "react-router-dom";
 import { initFlowbite } from "flowbite";
 import RootLayout from "./components/RootLayout";
 import Home from "./pages/Home";
@@ -26,11 +26,11 @@ const ProtectedRoute = ({ element, path }) => {
   return authenticated ? element : <Navigate to="/auth" />;
 };
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <RootLayout />,
-    // errorElement: <Error/>,
+    errorElement: <Error/>,
     children: [
       {
         index: true,
