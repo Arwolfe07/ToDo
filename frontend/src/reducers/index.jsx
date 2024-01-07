@@ -4,5 +4,13 @@ import currentUserReducer from "./currentUserReducer";
 import notificationReducer from "./notificationReducer";
 import weatherInfoReducer from "./weatherInfoReducer";
 import todoReducer from "./todoReducer";
+import loadingReducer from "./loadingReducer";
 
-export default combineReducers({ authReducer,currentUserReducer,notificationReducer,weatherInfoReducer,todoReducer });
+export default combineReducers({
+  authReducer,
+  currentUserReducer,
+  notificationReducer,
+  weatherInfoReducer,
+  todoReducer,
+  loadingReducer,
+});

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Gi3DGlasses } from "react-icons/gi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../actions/auth";
 
 const Login = ({ onChangeLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const load = useSelector((state) => state.loadingReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginSubmitHandler = (e) => {
@@ -31,7 +32,7 @@ const Login = ({ onChangeLogin }) => {
         payload: "Password should be atleast 8 characters long",
       });
     }
-
+    dispatch({ type: "START_LOAD" });
     dispatch(login({ email, password }, navigate));
   };
   return (
@@ -97,8 +98,29 @@ const Login = ({ onChangeLogin }) => {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-other focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+              disabled={load ? true : false}
             >
-              Sign in
+              {load ? (
+                <svg
+                  className="animate-spin mx-auto h-6 w-6 text-white-700"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-50"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              ) : (
+                <span>Sign in</span>
+              )}
             </button>
           </div>
         </form>

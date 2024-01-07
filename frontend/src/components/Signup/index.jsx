@@ -3,7 +3,7 @@ import { Gi3DGlasses } from "react-icons/gi";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { getWeatherData } from "../../apis/openweather";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../actions/auth";
 
@@ -14,6 +14,7 @@ const Signup = ({ onChangeLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [location, setLocation] = useState("");
   const [coordinates, setCoordinates] = useState({});
+  const load = useSelector((state) => state.loadingReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,7 +27,10 @@ const Signup = ({ onChangeLogin }) => {
       longitude: data.longitude,
       area: `${data.city}, ${data.region}`,
     });
-    dispatch({type: 'SET_MESSAGE', payload: 'If you see wrong location please turn on GPS'})
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "If you see wrong location please turn on GPS",
+    });
   };
 
   const signupSubmitHandler = (e) => {
@@ -56,8 +60,10 @@ const Signup = ({ onChangeLogin }) => {
         payload: "Passwords do not match",
       });
     }
-    
-    dispatch(signup({name,email,password,location: coordinates},navigate))
+    dispatch({ type: "START_LOAD" });
+    dispatch(
+      signup({ name, email, password, location: coordinates }, navigate)
+    );
   };
 
   return (
@@ -179,8 +185,29 @@ const Signup = ({ onChangeLogin }) => {
             <button
               type="submit"
               className="flex w-full mt-4 justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-other focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+              disabled = {load?true:false}
             >
-              Sign up
+              {load ? (
+                <svg
+                  className="animate-spin mx-auto h-6 w-6 text-white-700"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-50"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              ) : (
+                <span>Sign up</span>
+              )}
             </button>
           </div>
         </form>
