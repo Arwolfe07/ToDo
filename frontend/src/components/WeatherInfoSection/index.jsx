@@ -76,8 +76,11 @@ const WeatherInfoSection = () => {
                     </p>
                   </div>
                   <img
-                    src={`./src/assets/icons/${weatherInfo?.weather[0]?.icon}.png` || './src/assets/icons/10d.png'}
+                    src={`./src/assets/icons/${weatherInfo?.weather[0]?.icon}.png`}
                     alt="weather-icon"
+                    onError={(e) => {
+                      e.target.src = './src/assets/icons/10d.png';
+                    }}
                   />
                 </div>
                 <div className="flex justify-between items-center ">
