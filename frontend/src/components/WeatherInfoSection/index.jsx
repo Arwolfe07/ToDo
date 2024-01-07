@@ -64,7 +64,7 @@ const WeatherInfoSection = () => {
               </div>
             )}
           {user !== null &&
-            Object.keys(user?.result?.location).length !== 0 && load ? (
+            Object.keys(user?.result?.location).length !== 0 && !load ? (
               <div className="mx-2 w-full lg:p-6 p-1 bg-white bg-opacity-50 h-fit hover:cursor-pointer rounded-lg hover:translate-x-1 hover:translate-y-1 duration-150 hover:border-2 ">
                 <div className="flex justify-between items-center ">
                   <div>
