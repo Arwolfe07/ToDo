@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const URL = "http://localhost:5000";
+const URL =
+  process.env.NODE_ENV === "production"
+    ? "https://todo-backend-sw8z.onrender.com"
+    : "http://localhost:5000";
 
 const API = axios.create({ baseURL: URL });
 
