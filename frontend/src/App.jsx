@@ -52,6 +52,7 @@ const router = createHashRouter([
 function App() {
   useEffect(() => {
     initFlowbite(); // Initialize FlowBite styles and components
+    
   }, []);
 
   return (
