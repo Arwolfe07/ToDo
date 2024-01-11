@@ -2,6 +2,14 @@
 
 ## Description
 This is a simple Todo app built using React.js and Redux for state management, with Node.js, Express.js and MongoDB for backend. It allows user to note down ten most important tasks of the day and user can mark them done or not done as he proceeds. (Still being worked on).
+<div style="display: flex; justify-content: space-between;">
+<img src="https://github.com/Arwolfe07/ToDo/blob/master/screenshots/1.1_Chad.png" alt="Img" width="45%"></img>
+<img src="https://github.com/Arwolfe07/ToDo/blob/master/screenshots/1_Chad.png" alt="Img" width="45%"></img>
+</div>
+<div style="display: flex; justify-content: space-between;">
+<img src="https://github.com/Arwolfe07/ToDo/blob/master/screenshots/2_Chad.png" alt="Img" width="45%"></img>
+<img src="https://github.com/Arwolfe07/ToDo/blob/master/screenshots/3_Chad.png" alt="Img" width="45%"></img>
+</div>
 
 ## Features
 * Authentication:

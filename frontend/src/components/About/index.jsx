@@ -33,7 +33,7 @@ const About = () => {
 
               <p className="text-center md:text-left max-w-2xl py-4 text-lg leading-normal text-gray-500 lg:text-xl xl:text-xl dark:text-gray-300">
                 Some of the key benefits of using ChadMonkey has been
-                highlighted below. Do try this app out to increase you
+                highlighted below. Do try this app out to increase your
                 efficiency.
               </p>
             </div>
