@@ -56,7 +56,7 @@ const Navbar = () => {
     <nav className="bg-white bg-opacity-50 fixed w-full z-20 top-0 start-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
-          href="https://flowbite.com/"
+          to='/'
           className="flex items-center space-x-3"
         >
           <Gi3DGlasses className="text-4xl" />
