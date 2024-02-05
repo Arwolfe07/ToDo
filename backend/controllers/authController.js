@@ -13,7 +13,6 @@ module.exports.signup = asyncHandler(async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 12); // second argument is salt
         const newUser = await User.create({ email, name, password: hashedPassword, location });
-        console.log(newUser);
         const token = jwt.sign({ email: newUser.email, id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.status(200).json({ result: { name: newUser.name, location: newUser.location, email: newUser.email, profilePic: newUser.profilePic, verified: newUser.isVerified }, token });
     } catch (error) {

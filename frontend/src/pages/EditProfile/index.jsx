@@ -14,10 +14,8 @@ const EditProfile = () => {
   useEffect(() => {
     const formData = new FormData();
     formData.append("file", selectedFile);
-    console.log(selectedFile)
     if(selectedFile)
     {
-      console.log("changed")
       dispatch(updatePic(formData));
     }
   }, [selectedFile]);
