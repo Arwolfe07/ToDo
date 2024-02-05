@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Main from "./pages/Main";
 import Notification from "./components/Notification";
 import Error from "./pages/Error";
+import EditProfile from "./pages/EditProfile";
 
 
 const isAuthenticated = () => {
@@ -43,8 +44,12 @@ const router = createHashRouter([
       {
         path: '/todo',
         element: <ProtectedRoute element={<Main />} path="/todo" />
-
+      },
+      {
+        path: '/edit',
+        element: <ProtectedRoute element={<EditProfile/>} path="/edit" />
       }
+
     ],
   },
 ]);
@@ -52,7 +57,6 @@ const router = createHashRouter([
 function App() {
   useEffect(() => {
     initFlowbite(); // Initialize FlowBite styles and components
-    
   }, []);
 
   return (

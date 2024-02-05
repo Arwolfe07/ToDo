@@ -75,7 +75,7 @@ const About = () => {
                   Become a Chad
                 </h4>
                 <p className="mt-1 text-gray-500">
-                  Become unstoppable, don't procrastinate anymore
+                  Become unstoppable, don't procrastinate anymore.
                 </p>
               </div>
             </div>

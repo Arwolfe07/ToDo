@@ -10,7 +10,15 @@ const userReducer = (state = initialState, action) => {
       localStorage.clear();
       return { ...state, user: null };
     case "SET_LOCATION":
-      let obj = JSON.parse(localStorage.getItem("Profile"));
+      var obj = JSON.parse(localStorage.getItem("Profile"));
+      localStorage.setItem(
+        "Profile",
+        JSON.stringify({ ...obj, result: action.payload })
+      );
+      return { ...state, user: { result: action?.data, token: obj.token } };
+
+    case "SET_PIC":
+      var obj = JSON.parse(localStorage.getItem("Profile"));
       localStorage.setItem(
         "Profile",
         JSON.stringify({ ...obj, result: action.payload })

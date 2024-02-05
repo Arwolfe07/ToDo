@@ -1,43 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Gi3DGlasses } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
-import { FaLocationCrosshairs } from "react-icons/fa6";
-import { updateLocation } from "../../actions/auth";
 
 const Navbar = () => {
+  const [dropdown, setDropdown] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const user = useSelector((state) => state.currentUserReducer);
+  const toggleDropdown = () => {
+    setDropdown(!dropdown);
+  };
+
+  const closeDropdown = () => {
+    setDropdown(false);
+  };
   const loginPageHandler = () => {
     navigate("/auth");
   };
 
-  const logoutHandler = () => {
+  const logoutHandler = (e) => {
+    closeDropdown();
+    e?.preventDefault();
+    window.location.reload();
     dispatch({ type: "LOGOUT" });
-    navigate("/", { replace: true });
     dispatch({
       type: "SET_CURRENT_USER",
       payload: null,
     });
   };
-  const getLocationHandler = async () => {
-    // small api to get location i.e. coordinates and place (might give false results on non-gps devices)
-    const { data } = await axios.get("https://ipapi.co/json");
-    dispatch(
-      updateLocation({
-        location: {
-          latitude: data.latitude,
-          longitude: data.longitude,
-          area: `${data.city}, ${data.region}`,
-        },
-      })
-    );
-  };
+  useEffect(() => {
+    // Update window width when the window is resized
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   useEffect(() => {
     const token = user?.token;
     if (token) {
@@ -51,14 +58,16 @@ const Navbar = () => {
       payload: JSON.parse(localStorage.getItem("Profile")),
     });
   }, [dispatch]);
+  useEffect(() => {
+    if (windowWidth < 768) {
+      closeDropdown();
+    }
+  }, [windowWidth]);
 
   return (
     <nav className="bg-white bg-opacity-50 fixed w-full z-20 top-0 start-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link
-          to='/'
-          className="flex items-center space-x-3"
-        >
+        <Link to="/" className="flex items-center space-x-3">
           <Gi3DGlasses className="text-4xl" />
           <span className="self-center text-2xl font-extrabold whitespace-nowrap">
             <span className="text-primary">Chad</span>
@@ -66,17 +75,71 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="flex md:order-2   space-x-1 md:space-x-3">
-          {user !== null &&
-           (
-              <button
+          {user !== null && (
+            <>
+              <div
                 type="button"
-                className="flex py-2.5 w-1/2 items-center justify-center rounded-md bg-primary px-3 sm:py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-other focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                onClick={getLocationHandler}
+                data-dropdown-placement="bottom-start"
+                data-dropdown-toggle="userDropdown"
+                className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 cursor-pointer hidden md:block"
+                onClick={toggleDropdown}
               >
-                <FaLocationCrosshairs />
-                
-              </button>
-            )}
+                <img
+                  id="avatarButton"
+                  // className="text-gray-400"
+                  className="w-12 h-12 rounded-full cursor-pointer"
+                  src={user?.result?.profilePic}
+                  alt="User dropdown"
+                />
+              </div>
+              <div
+                id="userDropdown"
+                className={`z-10 ${
+                  dropdown ? "" : "hidden"
+                } fixed top-16 right-0  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+              >
+                <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                  <div>{user?.result?.name}</div>
+                  <div className="font-medium truncate">{user?.result?.email}</div>
+                </div>
+                <ul
+                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="avatarButton"
+                >
+                  <li>
+                    <Link
+                      to="/edit"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={closeDropdown}
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => {
+                        alert("Working on it");
+                        closeDropdown();
+                      }}
+                    >
+                      Dashboard
+                    </a>
+                  </li>
+                </ul>
+                <div className="py-1">
+                  <Link
+                    to={"/"}
+                    onClick={(e) => logoutHandler(e)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    Sign out
+                  </Link>
+                </div>
+              </div>
+            </>
+          )}
           {user === null && (
             <button
               type="button"
@@ -84,15 +147,6 @@ const Navbar = () => {
               onClick={loginPageHandler}
             >
               Login
-            </button>
-          )}
-          {user !== null && (
-            <button
-              type="button"
-              className="text-white bg-primary hover:bg-other focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
-              onClick={logoutHandler}
-            >
-              Logout
             </button>
           )}
           <button
@@ -125,10 +179,37 @@ const Navbar = () => {
           id="navbar-sticky"
         >
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-white md:bg-opacity-0">
+            {user !== null && (
+              <li className="md:hidden flex justify-center flex-col items-center">
+                {/* <Link
+                href="/"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                aria-current="page"
+                >
+                Home
+              </Link> */}
+                <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 cursor-pointer">
+                  <img
+                    id="avatarButton"
+                    // className="text-gray-400"
+                    className="w-12 h-12 rounded-full cursor-pointer"
+                    src={user?.result?.profilePic}
+                    alt="User dropdown"
+                  />
+                </div>
+
+                <div className="my-4 flex justify-around text-sm w-full">
+                  <div onClick={() => navigate("/edit")}>Edit Profile</div>
+                  <div onClick={() => alert("Working on it")}>Dashboard</div>
+                  {/* <div>Verify Email</div> */}
+                </div>
+                <hr className="w-full"></hr>
+              </li>
+            )}
             <li>
               <Link
                 href="/"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                className="block py-2 px-3 text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
                 aria-current="page"
               >
                 Home
@@ -136,7 +217,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                className="block py-2 px-3 text-gray-900 text-center rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
                 onClick={(e) => {
                   e.preventDefault();
                   if (location.pathname === "/") {
@@ -163,11 +244,22 @@ const Navbar = () => {
             <li>
               <Link
                 to="/todo"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                className="block py-2 px-3 text-gray-900 text-center rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
               >
                 Tasks
               </Link>
             </li>
+            {user !== null && (
+              <li className="md:hidden">
+                <Link
+                  to={"/"}
+                  onClick={(e) => logoutHandler(e)}
+                  className="block py-2 px-3 text-gray-900 text-center rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0"
+                >
+                  Sign Out
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

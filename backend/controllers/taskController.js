@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const moment = require('moment');
 const User = require("../models/user");
 const Task = require("../models/task");
 
@@ -6,7 +7,7 @@ module.exports.allTasks = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     try {
         const user = await User.findById(_id).populate('tasks');
-        res.status(200).json({ tasks: user.tasks });
+        res.status(200).json({ tasks: user.tasks.filter(task => task.date === moment().format("DD/MM/YYYY")) });
     } catch (error) {
         res.status(500).json("Something went wrong...");
     }

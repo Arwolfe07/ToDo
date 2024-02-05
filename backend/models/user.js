@@ -14,7 +14,12 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Task'
         }
-    ]
+    ],
+    isVerified: { type: Boolean, default: false },
+    profilePic: {
+        type: String, 
+        default: "https://res.cloudinary.com/dmiwkobsc/image/upload/v1706706875/nfxbonc3remcipr9fefy.svg"
+    }
 })
 
 module.exports = mongoose.model("User", userSchema);

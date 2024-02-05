@@ -12,30 +12,30 @@ const Main = () => {
     dispatch(fetchTasks());
   }, []);
 
-  useEffect(() => {
-    const logout = () => {
-      dispatch({ type: "LOGOUT" });
-      navigate("/", { replace: true });
-      dispatch({
-        type: "SET_CURRENT_USER",
-        payload: null,
-      });
-    };
-    const token = user?.token;
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) {
-        logout();
-      }
-    }
-    dispatch({
-      type: "SET_CURRENT_USER",
-      payload: JSON.parse(localStorage.getItem("Profile")),
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const logout = () => {
+  //     dispatch({ type: "LOGOUT" });
+  //     navigate("/", { replace: true });
+  //     dispatch({
+  //       type: "SET_CURRENT_USER",
+  //       payload: null,
+  //     });
+  //   };
+  //   const token = user?.token;
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     if (decodedToken.exp * 1000 < new Date().getTime()) {
+  //       logout();
+  //     }
+  //   }
+  //   dispatch({
+  //     type: "SET_CURRENT_USER",
+  //     payload: JSON.parse(localStorage.getItem("Profile")),
+  //   });
+  // }, [dispatch]);
 
   return (
-    <div className="py-20 h-screen border-2 flex flex-col md:flex-row">
+    <div className="py-20 h-screen flex flex-col md:flex-row">
       <WeatherInfoSection />
       <TasksSection />
     </div>

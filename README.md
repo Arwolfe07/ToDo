@@ -32,7 +32,6 @@ This is a simple Todo app built using React.js and Redux for state management, w
  * Responsive UI for different screen sizes.
 
 
-
 ## Note 
 * This project contains some info (.env file) that has been hidden for security purposes so please enter your credentials on cloning the repo.
 * This project has been hosted at - [Here](https://chadmonkey.netlify.app/)
